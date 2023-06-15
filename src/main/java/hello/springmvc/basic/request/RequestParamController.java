@@ -1,7 +1,9 @@
 package hello.springmvc.basic.request;
 
+import hello.springmvc.basic.HelloData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -82,4 +84,37 @@ public class RequestParamController {
                 paramMap.get("age"));
         return "ok";
     }
+
+
+    /**
+    @ResponseBody
+    @RequestMapping("model-attribute-v1")
+    public String modelAttributeV1(@RequestParam String username, @RequestParam int age) {
+        HelloData helloData = new HelloData();
+        helloData.setUsername(username);
+        helloData.setAge(age);
+
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("helloData = {}", helloData); //username, age 자동으로 예쁘게 찍어줌
+        return "o  k  😣";
+    }
+     */
+
+
+    //@ModelAttribute 의 힘.. : HelloData 객체가 생성되고 요청파라미터 값도 모두 들어감 😮
+    @ResponseBody
+    @RequestMapping("model-attribute-v1")
+    public String modelAttributeV1(@ModelAttribute HelloData helloData) {
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("helloData = {}", helloData); //username, age 자동으로 예쁘게 찍어줌
+        return "o  k  😣";
+    }
+    @ResponseBody
+    @RequestMapping("model-attribute-v2")
+    public String modelAttributeV2(HelloData helloData) { //@ModelAttribute 생략 가능 but, @RequestParam도 생략 가능하니 혼란 발생 가능성 있음
+        log.info("username={}, age={}", helloData.getUsername(), helloData.getAge());
+        log.info("helloData = {}", helloData); //username, age 자동으로 예쁘게 찍어줌
+        return "o  k  😣";
+    }
+
 }
